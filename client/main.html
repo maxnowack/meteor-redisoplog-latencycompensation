@@ -1,0 +1,34 @@
+<head>
+  <title>meteor-allowdeny-redisoplog-test</title>
+</head>
+
+<body>
+  <h1>Welcome to Meteor!</h1>
+
+  {{> posts}}
+</body>
+
+<template name="posts">
+  <button class="insert-post">Insert post</button>
+  <button class="insert-post-clientside">Insert post client side</button>
+  <div style="display:flex">
+    <ul>
+      {{#each post in posts}}
+        <li>
+          {{post.title}}
+        </li>
+      {{else}}
+        <li>
+          sorry, no posts here ...
+        </li>
+      {{/each}}
+    </ul>
+    <ul>
+      {{#each log in logs}}
+        <li>
+          {{log}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>
