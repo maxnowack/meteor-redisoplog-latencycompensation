@@ -11,7 +11,7 @@ Meteor.methods({
 })
 
 if (Meteor.isServer) {
-  Meteor.publishWithRedis('posts', () => Posts.find())
+  Meteor.publish('posts', () => Posts.find())
   Posts.allow({
     insert: () => true,
     update: () => true,
