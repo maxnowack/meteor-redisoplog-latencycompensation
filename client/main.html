@@ -9,26 +9,20 @@
 </body>
 
 <template name="posts">
-  <button class="insert-post">Insert post</button>
-  <button class="insert-post-clientside">Insert post client side</button>
-  <div style="display:flex">
-    <ul>
-      {{#each post in posts}}
-        <li>
-          {{post.title}}
-        </li>
-      {{else}}
-        <li>
-          sorry, no posts here ...
-        </li>
-      {{/each}}
-    </ul>
-    <ul>
-      {{#each log in logs}}
-        <li>
-          {{log}}
-        </li>
-      {{/each}}
-    </ul>
-  </div>
+  {{#if loggedIn}}
+    <div style="display:flex">
+      <div>
+        user profile prop: {{user.profile.prop}} <button class="update">increment</button>
+      </div>
+      <ul>
+        {{#each log in logs}}
+          <li>
+            {{log}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
+    <button class="create">create user & login</button>
+  {{/if}}
 </template>

@@ -1,25 +1,13 @@
 import { Meteor } from 'meteor/meteor'
-import { Mongo } from 'meteor/mongo'
-
-const Posts = new Mongo.Collection('posts')
-global.Posts = Posts
 
 Meteor.methods({
-  createPost(data) {
-    return Posts.insert(data)
+  updateNested() {
+    const user = Meteor.users.findOne({ _id: this.userId })
+    const newVal = user.profile.prop + 1
+    Meteor.users.update({ _id: this.userId }, { $set: { 'profile.prop': newVal }})
   }
 })
 
 if (Meteor.isServer) {
   Meteor.publishWithRedis('posts', () => Posts.find())
-  Posts.allow({
-    insert: () => true,
-    update: () => true,
-    remove: () => true,
-  })
-  Posts.deny({
-    insert: () => false,
-    update: () => false,
-    remove: () => false,
-  })
 }

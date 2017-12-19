@@ -1,39 +1,34 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { $ } from 'meteor/jquery';
 
 import './main.html';
 
 const Logs = new Mongo.Collection(null)
 
 Template.posts.helpers({
-  posts() {
-    return Posts.find()
-  },
+  loggedIn: () => !!Meteor.userId(),
+  user: () => Meteor.user(),
   logs() {
     return Logs.find().map(entry => entry.title)
   }
 });
 
 Template.posts.events({
-  'click .insert-post'(event, instance) {
-    Meteor.call('createPost', { title: 'new post' })
+  'click .update'(event, instance) {
+    Meteor.call('updateNested')
   },
-  'click .insert-post-clientside'(event, instance) {
-    Posts.insert({ title: 'new post' })
+  'click .create'(event) {
+    event.preventDefault()
+    Accounts.createUser({
+      email: 'test@example.com',
+      password: 'test123',
+    })
   },
 });
 
-Meteor.subscribe('posts')
-
-Posts.find().observeChanges({
-  added(_id) {
-    const title = `added post with _id ${_id}`
-    console.log(title)
-    Logs.insert({ title })
-  },
-  removed(_id) {
-    const title = `removed post with _id ${_id}`
-    console.log(title)
-    Logs.insert({ title })
+Meteor.users.find().observeChanges({
+  changed(_id, fields) {
+    Logs.insert({ title: `changed: ${JSON.stringify(fields)}` })
   },
 })
